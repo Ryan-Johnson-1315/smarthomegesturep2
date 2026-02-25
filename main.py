@@ -43,7 +43,8 @@ def get_gesture_label(filename: str):
     if label_candidate in gestures:
         return label_candidate
     else:
-        return "0"  # not found
+        raise BaseException(f"Not found {filename}")
+        return None  # not found
     
 label_lookup = {
   "0": "0",
@@ -158,9 +159,7 @@ for test in test_data:
     continue
 
   label = label_lookup[gesture_name]
-  if df is None:
-    df = pd.DataFrame([label])
-  else:
+  if label is not None:
     df = pd.concat([df, pd.DataFrame([label])])
 
 print(df.shape)
