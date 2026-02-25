@@ -136,7 +136,7 @@ for file in files:
   test_data[path] = vec
   # input()
 
-df: pd.DataFrame = pd.DataFrame() 
+df: pd.DataFrame = pd.DataFrame()
 
 for test in test_data:
   accuracy = 0.0
@@ -158,9 +158,12 @@ for test in test_data:
     continue
 
   label = label_lookup[gesture_name]
-  
-  df = pd.concat([df, pd.DataFrame([label])])
+  if df is None:
+    df = pd.DataFrame([label])
+  else:
+    df = pd.concat([df, pd.DataFrame([label])])
 
+print(df.shape)
 with open('Results.csv', 'w') as f:
   df.to_csv(f, index=False)
 
