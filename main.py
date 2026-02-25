@@ -26,60 +26,25 @@ def cosine_sim(vec1: np.ndarray, vec2: np.ndarray):
   return dot / (mag_1 * mag_2)
 
 
-gesture_lookup = {
-  "T1-H-0.mp4": "0",
-  "T1-H-1.mp4": "1",
-  "T1-H-2.mp4": "2",
-  "T1-H-3.mp4": "3",
-  "T1-H-4.mp4": "4",
-  "T1-H-5.mp4": "5",
-  "T1-H-6.mp4": "6",
-  "T1-H-7.mp4": "7",
-  "T1-H-8.mp4": "8",
-  "T1-H-9.mp4": "9",
-  "T1-H-DecreaseFanSpeed.mp4": "DecreaseFanSpeed",
-  "T1-H-FanOff.mp4": "FanOff",
-  "T1-H-FanOn.mp4": "FanOn",
-  "T1-H-IncreaseFanSpeed.mp4": "IncreaseFanSpeed",
-  "T1-H-LightOff.mp4": "LightOff",
-  "T1-H-LightOn.mp4": "LightOn",
-  "T1-H-SetThermo.mp4": "SetThermo",
-  "T2-H-0.mp4": "0",
-  "T2-H-1.mp4": "1",
-  "T2-H-2.mp4": "2",
-  "T2-H-3.mp4": "3",
-  "T2-H-4.mp4": "4",
-  "T2-H-5.mp4": "5",
-  "T2-H-6.mp4": "6",
-  "T2-H-7.mp4": "7",
-  "T2-H-8.mp4": "8",
-  "T2-H-9.mp4": "9",
-  "T2-H-DecreaseFanSpeed.mp4": "DecreaseFanSpeed",
-  "T2-H-FanOff.mp4": "FanOff",
-  "T2-H-FanOn.mp4": "FanOn",
-  "T2-H-IncreaseFanSpeed.mp4": "IncreaseFanSpeed",
-  "T2-H-LightOff.mp4": "LightOff",
-  "T2-H-LightOn.mp4": "LightOn",
-  "T2-H-SetThermo.mp4": "SetThermo",
-  "T3-H-0.mp4": "0",
-  "T3-H-1.mp4": "1",
-  "T3-H-2.mp4": "2",
-  "T3-H-3.mp4": "3",
-  "T3-H-4.mp4": "4",
-  "T3-H-5.mp4": "5",
-  "T3-H-6.mp4": "6",
-  "T3-H-7.mp4": "7",
-  "T3-H-8.mp4": "8",
-  "T3-H-9.mp4": "9",
-  "T3-H-DecereaseFanSpeed.mp4": "DecreaseFanSpeed",
-  "T3-H-FanOff.mp4": "FanOff",
-  "T3-H-FanOn.mp4": "FanOn",
-  "T3-H-IncreaseFanSpeed.mp4": "IncreaseFanSpeed",
-  "T3-H-LightOff.mp4": "LightOff",
-  "T3-H-LightOn.mp4": "LightOn",
-  "T3-H-SetThermo.mp4": "SetThermo"
-}
-
+def get_gesture_label(filename: str):
+    # Define a lookup table of known gestures
+    gestures = {
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "DecreaseFanSpeed", "FanOff", "FanOn", "IncreaseFanSpeed",
+        "LightOff", "LightOn", "SetThermo"
+    }
+    
+    # Remove extension
+    base_name = filename.rsplit('.', 1)[0]  # removes .mp4 or any other extension
+    # Split by '-' and take the last part
+    label_candidate = base_name.split('-')[-1]
+    
+    # Check if candidate is a known gesture
+    if label_candidate in gestures:
+        return label_candidate
+    else:
+        return None  # not found
+    
 label_lookup = {
   "0": "0",
   "1": "1",
@@ -191,7 +156,11 @@ for test in test_data:
 
   print(f'Best match for {test} is {test_vid} with {accuracy} accuracy')
   
-  gesture_name = gesture_lookup[os.path.basename(test)]
+  gesture_name = get_gesture_label(os.path.basename(test))
+  if gesture_name is None:
+    print(f'Skipping file name: {test}, since its not found')
+    continue
+
   label = label_lookup[gesture_name]
   
   df = pd.concat([df, pd.DataFrame([{"Video": os.path.basename(test), "Gesture Name": gesture_name, "Label": label}])])
