@@ -165,7 +165,7 @@ for test in test_data:
   
   df = pd.concat([df, pd.DataFrame([{"Video": os.path.basename(test), "Gesture Name": gesture_name, "Label": label}])])
 
-with open('results.csv', 'w') as f:
+with open('Results.csv', 'w') as f:
   df.to_csv(f, index=False)
 
 
