@@ -164,8 +164,7 @@ for test in test_data:
     df = pd.concat([df, pd.DataFrame([label])])
 
 print(df.shape)
-with open('Results.csv', 'w') as f:
-  df.to_csv(f, index=False)
+df.to_csv("Results.csv", index=False)
 
 
 # =============================================================================
