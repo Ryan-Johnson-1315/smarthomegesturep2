@@ -43,7 +43,7 @@ def get_gesture_label(filename: str):
     if label_candidate in gestures:
         return label_candidate
     else:
-        return None  # not found
+        return "0"  # not found
     
 label_lookup = {
   "0": "0",
