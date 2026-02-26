@@ -45,8 +45,8 @@ def get_gesture_label(filename: str):
     else:
         # raise BaseException(f"Not found {filename}")
         # print(f"NOt found: {filename}")
-        # return None  # not found
-        return "0"
+        return None  # not found
+        # return "0"
     
 label_lookup = {
   "0": "0",
