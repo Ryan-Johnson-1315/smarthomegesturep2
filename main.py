@@ -36,7 +36,7 @@ def get_gesture_label(filename: str):
         # Test.zip train data labels
         "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
         "IncreaseFanSpeed", "FanOff", "FanOn", "DecreaseFanSpeed",
-        "LightOff", "LightOn", "SetThermo",
+        "LightOff", "LightOn", "SetThermo", "DecereaseFanSpeed"
     }
     base = os.path.basename(filename)
     
@@ -88,7 +88,8 @@ label_lookup = {
   "8": "8",
   "9": "9",
   "DecreaseFanSpeed": "10",
-  "IncreaseFanSpeed": "13",
+  "DecereaseFanSpeed": "10",
+  "IncreaseFanSpeed": "13"
 }
 
 # =============================================================================
@@ -176,6 +177,8 @@ for test in test_data:
   label = get_gesture_label(os.path.basename(train_vid))
   if label is not None:
     df = pd.concat([df, pd.DataFrame([label])])
+  else:
+    print(f"******Unknown label: {train_vid}")
 
 print(df.shape)
 
