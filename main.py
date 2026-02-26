@@ -43,7 +43,7 @@ def get_gesture_label(filename: str):
     if label_candidate in gestures:
         return label_candidate
     else:
-        raise BaseException(f"Not found {filename}")
+        # raise BaseException(f"Not found {filename}")
         return None  # not found
     
 label_lookup = {
