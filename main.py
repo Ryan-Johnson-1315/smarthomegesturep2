@@ -40,7 +40,7 @@ def get_gesture_label(filename: str):
     
     # Check if candidate is a known gesture
     if label_candidate in gestures:
-        return label_candidate
+        return label_lookup[label_candidate]
     else:
         # raise BaseException(f"Not found {filename}")
         # print(f"NOt found: {filename}")
@@ -151,12 +151,7 @@ for test in test_data:
 
   print(f'Best match for {test} is {train_vid} with {accuracy} accuracy')
   
-  gesture_name = get_gesture_label(os.path.basename(train_vid))
-  if gesture_name is None:
-    print(f'Skipping file name: {train_vid}, since its not found')
-    continue
-
-  label = label_lookup[gesture_name]
+  label = get_gesture_label(os.path.basename(train_vid))
   if label is not None:
     df = pd.concat([df, pd.DataFrame([label])])
 
