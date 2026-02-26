@@ -44,6 +44,7 @@ def get_gesture_label(filename: str):
         return label_candidate
     else:
         # raise BaseException(f"Not found {filename}")
+        print(f"NOt found: {filename}")
         return None  # not found
     
 label_lookup = {
@@ -165,6 +166,7 @@ for test in test_data:
 print(df.shape)
 df.to_csv("Results.csv", index=False)
 
+raise BaseException("Debug")
 
 # =============================================================================
 # Recognize the gesture (use cosine similarity for comparing the vectors)
