@@ -29,15 +29,14 @@ def cosine_sim(vec1: np.ndarray, vec2: np.ndarray):
 def get_gesture_label(filename: str):
     # Define a lookup table of known gestures
     gestures = {
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-        "DecreaseFanSpeed", "FanOff", "FanOn", "IncreaseFanSpeed",
+        "Num0", "Num1", "Num2", "Num3", "Num4", "Num5", "Num6", "Num7", "Num8", "Num9",
+        "FanUp", "FanOff", "FanOn", "FanDown",
         "LightOff", "LightOn", "SetThermo"
     }
+    base = os.path.basename(filename)
     
-    # Remove extension
-    base_name = filename.rsplit('.', 1)[0]  # removes .mp4 or any other extension
-    # Split by '-' and take the last part
-    label_candidate = base_name.split('-')[-1]
+    label_candidate = base.split('_PRACTICE_')[0]
+    print(f'\tlabel candidate: {label_candidate}')
     
     # Check if candidate is a known gesture
     if label_candidate in gestures:
@@ -49,20 +48,20 @@ def get_gesture_label(filename: str):
         # return "0"
     
 label_lookup = {
-  "0": "0",
-  "1": "1",
-  "2": "2",
-  "3": "3",
-  "4": "4",
-  "5": "5",
-  "6": "6",
-  "7": "7",
-  "8": "8",
-  "9": "9",
-  "DecreaseFanSpeed": "10",
+  "Num0": "0",
+  "Num1": "1",
+  "Num2": "2",
+  "Num3": "3",
+  "Num4": "4",
+  "Num5": "5",
+  "Num6": "6",
+  "Num7": "7",
+  "Num8": "8",
+  "Num9": "9",
+  "FanDown": "10",
   "FanOff": "11",
   "FanOn": "12",
-  "IncreaseFanSpeed": "13",
+  "FanUp": "13",
   "LightOff": "14",
   "LightOn": "15",
   "SetThermo": "16",
@@ -134,30 +133,27 @@ for file in files:
   cap.release()
 
   vec = extractor.extract_feature(frame)
-  # print(vec)
-  
   test_data[path] = vec
-  # input()
 
 df: pd.DataFrame = pd.DataFrame()
 
 for test in test_data:
   accuracy = 0.0
-  test_vid = ''
+  train_vid = ''
   for train in training_data:
     # TODO: add a "already found" to optimize for performance
 
     similarity = cosine_sim(training_data[train], test_data[test])
     if similarity > accuracy:
       accuracy = similarity
-      test_vid = train
+      train_vid = train
     # print(f'Simularity for {train} and {test} = {similarity}')
 
-  print(f'Best match for {test} is {test_vid} with {accuracy} accuracy')
+  print(f'Best match for {test} is {train_vid} with {accuracy} accuracy')
   
-  gesture_name = get_gesture_label(os.path.basename(test))
+  gesture_name = get_gesture_label(os.path.basename(train_vid))
   if gesture_name is None:
-    print(f'Skipping file name: {test}, since its not found')
+    print(f'Skipping file name: {train_vid}, since its not found')
     continue
 
   label = label_lookup[gesture_name]
