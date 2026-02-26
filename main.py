@@ -31,7 +31,12 @@ def get_gesture_label(filename: str):
     gestures = {
         "Num0", "Num1", "Num2", "Num3", "Num4", "Num5", "Num6", "Num7", "Num8", "Num9",
         "FanUp", "FanOff", "FanOn", "FanDown",
-        "LightOff", "LightOn", "SetThermo"
+        "LightOff", "LightOn", "SetThermo",
+        
+        # Test.zip train data labels
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "IncreaseFanSpeed", "FanOff", "FanOn", "DecreaseFanSpeed",
+        "LightOff", "LightOn", "SetThermo",
     }
     base = os.path.basename(filename)
     
@@ -40,13 +45,18 @@ def get_gesture_label(filename: str):
     
     # Check if candidate is a known gesture
     if label_candidate in gestures:
-        return label_lookup[label_candidate]
-    else:
-        # raise BaseException(f"Not found {filename}")
-        # print(f"NOt found: {filename}")
-        return None  # not found
-        # return "0"
+      return label_lookup[label_candidate]
     
+    # Check the filename against the test.zip labels
+    
+    filename = base.split(".mp4")[0]
+    label_candidate = filename.split("-")[-1]
+    if label_candidate in gestures:
+      return label_lookup[label_candidate]
+    
+    return None
+
+
 label_lookup = {
   "Num0": "0",
   "Num1": "1",
@@ -65,6 +75,20 @@ label_lookup = {
   "LightOff": "14",
   "LightOn": "15",
   "SetThermo": "16",
+  
+  # labels for the test.zip videos
+  "0": "0",
+  "1": "1",
+  "2": "2",
+  "3": "3",
+  "4": "4",
+  "5": "5",
+  "6": "6",
+  "7": "7",
+  "8": "8",
+  "9": "9",
+  "DecreaseFanSpeed": "10",
+  "IncreaseFanSpeed": "13",
 }
 
 # =============================================================================
@@ -100,10 +124,8 @@ for file in files:
   cap.release()
 
   vec = extractor.extract_feature(frame)
-  # print(vec)
-  
+
   training_data[path] = vec
-  # input()
 
 print(training_data)
 
