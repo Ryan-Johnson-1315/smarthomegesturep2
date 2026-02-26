@@ -164,9 +164,10 @@ for test in test_data:
     df = pd.concat([df, pd.DataFrame([label])])
 
 print(df.shape)
+df = df.head(51)
+
 df.to_csv("Results.csv", index=False)
 
-raise BaseException("Debug")
 
 # =============================================================================
 # Recognize the gesture (use cosine similarity for comparing the vectors)
